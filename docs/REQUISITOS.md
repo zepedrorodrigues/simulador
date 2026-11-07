@@ -67,7 +67,8 @@ informativa: não é custo certo, não entra no total.
 
 Na taxa fixa não há cenários; na mista, aplicam-se só ao período variável.
 
-O conservador e o positivo mantêm o extremo histórico durante **3 a 5 anos** e
+O conservador e o positivo mantêm o extremo histórico durante **5 anos** (ou
+durante todo o período variável, se for mais curto) e
 depois **voltam ao realista** até ao fim do prazo (ou do período variável). O
 utilizador vê, junto de cada cenário, os valores de Euribor usados, a regra que os
 deu e durante quanto tempo cada um se aplica.
@@ -116,8 +117,6 @@ Fontes secundárias (Bluegamma, curva de swaps) dão ~3,45–3,59% para o 12M em
 2. Euribor negativa: confirmar se a Lei n.º 32/2018 teve alterações.
 3. Fonte para a trajectória realista do 6M e do 12M (as primárias encontradas só
    dão 3M), e com que frequência se actualizam os três cenários.
-4. Duração exacta dos extremos no conservador e no positivo: 3, 4 ou 5 anos.
-
 ## Funcionalidades e MVP
 
 Validado a 2026-11-07.
