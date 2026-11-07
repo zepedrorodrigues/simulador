@@ -30,7 +30,7 @@ utilizadores · ligação ao banco com dados pré-preenchidos.
 
 | id | requisito | critério de aceitação |
 |---|---|---|
-| RF1 | Formulário único: valor do imóvel, montante, prazo, titulares (idade, rendimento, encargos de cada), residência, finalidade, modalidade de taxa. | Só o mínimo que um simulador de banco pede; sem documentos nem contratos. |
+| RF1 | Formulário único: valor do imóvel, localização (Continente, Açores, Madeira), montante, prazo, titulares (idade, rendimento **bruto mensal**, encargos de cada), residência, finalidade, modalidade de taxa. | Só o mínimo que um simulador de banco pede; sem documentos nem contratos. Quando um banco pede o rendimento noutra forma (líquido, anual), a conversão é nossa e fica indicada no bloco desse banco. |
 | RF2 | Campos condicionais só quando uma regra precisa deles (ex.: 1.ª habitação própria permanente, para as isenções de jovens). | Um campo condicional não aparece a quem não é afectado por ele. |
 | RF3 | Todas as finalidades: HPP, secundária, arrendamento, construção, obras, terreno, transferência, multiopções. | Cada banco responde, ou aparece como «não oferece». |
 | RF4 | Titulares até ao máximo que algum banco aceite. | Um banco com limite menor aparece como «não oferece». |
@@ -40,7 +40,7 @@ utilizadores · ligação ao banco com dados pré-preenchidos.
 | RF8 | Bloco por banco: MTIC, TAEG, TAN, Euribor considerada, spread, prestação com e sem seguros, valor dos seguros, e cada comissão. | Todos os valores do bloco vêm da resposta do banco. |
 | RF9 | Custos da compra, numa linha à parte que soma ao total: IMT, imposto do selo sobre a aquisição, escritura, registos — com as isenções para jovens quando se aplicam. | Rotulados «calculado pelo simulador», distintos do bloco do banco. |
 | RF10 | Taxa variável e mista: Euribor de hoje e três cenários (ver *Cenários*). | Rotulados «calculado pelo simulador», com o valor da Euribor de cada cenário à vista. |
-| RF11 | Tabela comparativa; por banco, uma ligação para o detalhe, o PDF e o simulador do banco. | Do resumo ao detalhe e ao banco em um clique cada. |
+| RF11 | Tabela comparativa; por banco, uma ligação para o detalhe, o PDF e o simulador do banco. | Do resumo ao detalhe e ao banco em um clique cada. Ordenada por prestação; em empate, por MTIC e depois por TAEG. |
 | RF12 | PDF por banco: relatório nosso com a resposta do banco. | Diz que não é documento do banco; só existe enquanto o resultado está aberto. |
 | RF13 | Os resultados aparecem à medida que cada banco responde. | Um banco lento não atrasa os outros. |
 | RF14 | Aviso: indicativo, sem pedido de crédito, os dados seguem para o simulador do banco. | Visível antes de submeter e no resultado. |
@@ -61,10 +61,18 @@ informativa: não é custo certo, não entra no total.
 | RNF2 | Três estados distintos por célula: **obtido**, **o banco não oferece**, **indisponível** (falhou obter). |
 | RNF3 | Nada persiste depois da interacção — nem dados pessoais, nem respostas. |
 | RNF4 | Cobertura inicial: os 10 bancos cujo simulador seja mais fácil de reproduzir; os restantes a seguir. |
+| RNF5 | Corre no browser. Está planeada uma aplicação: nada no desenho a deve impedir. |
 
 ## Cenários de Euribor (RF10)
 
 Na taxa fixa não há cenários; na mista, aplicam-se só ao período variável.
+
+Cada cenário mantém o seu valor **durante todo o prazo** (ou todo o período
+variável). O utilizador vê, junto de cada cenário, o valor de Euribor usado, a
+regra que o deu e que se mantém constante — é um limite, não uma previsão.
+
+A trajectória de cada indexante (3M, 6M, 12M) calcula-se **com dados desse
+indexante**, nunca derivada de outro.
 
 ### Conservador e positivo: extremos históricos
 
@@ -94,8 +102,8 @@ Fontes primárias encontradas, ambas do BCE e **ambas só para a Euribor a 3M**:
 - Survey of Monetary Analysts (mediana): 2,65% em mar./abr. 2027, 2,18% no
   3.º trim. 2029 (inquérito de 24–26 ago. 2026).
 
-Por decidir: como derivar o 6M e o 12M (ex.: trajectória do 3M mais o diferencial
-actual de cada prazo). As curvas de futuros de mercado (ICE, Eurex) são licenciadas.
+Falta uma fonte própria para o 6M e o 12M: derivá-los do 3M foi recusado. As
+curvas de futuros de mercado (ICE, Eurex) são licenciadas.
 Fontes secundárias (Bluegamma, curva de swaps) dão ~3,45–3,59% para o 12M em
 2027–2029 e divergem entre si.
 
@@ -105,5 +113,32 @@ Fontes secundárias (Bluegamma, curva de swaps) dão ~3,45–3,59% para o 12M em
    simulador aceita e devolve. É também esse levantamento que diz onde o RNF1
    obriga a mostrar «indisponível» no RF5, RF7 e RF8.
 2. Euribor negativa: confirmar se a Lei n.º 32/2018 teve alterações.
-3. Cenário realista para 6M e 12M (as fontes primárias só dão 3M), e com que
-   frequência se actualizam os três cenários.
+3. Fonte para a trajectória realista do 6M e do 12M (as primárias encontradas só
+   dão 3M), e com que frequência se actualizam os três cenários.
+
+## Funcionalidades e MVP
+
+Validado a 2026-11-07.
+
+**MVP**: habitação própria permanente, aquisição, 1–2 titulares, 3 bancos — o
+caso que todos os bancos simulam, logo o que prova o circuito
+formulário → bancos → tabela com menos risco.
+
+| # | funcionalidade | prioridade | justificação |
+|---|---|---|---|
+| 1 | Formulário único, campos mínimos | MVP | Sem ele não há produto. |
+| 2 | Pedidos em paralelo, resultados à medida que chegam | MVP | Um banco lento não bloqueia os outros. |
+| 3 | Bloco por banco (MTIC, TAEG, TAN, Euribor, spread, prestação com e sem seguros, comissões) | MVP | É o resultado pedido. |
+| 4 | Três estados por célula | MVP | Sem isto não se cumpre o RNF1. |
+| 5 | Tabela comparativa, ligação ao simulador do banco | MVP | A forma de comparar escolhida. |
+| 6 | Custos da compra calculados, em linha à parte | MVP | Entram no total; dependem só da lei. |
+| 7 | Avisos (indicativo, sem pedido, dados enviados ao banco) | MVP | Compromisso com o utilizador. |
+| 8 | Até 10 bancos | v1 | Cada banco é um levantamento à parte. |
+| 9 | Com e sem bonificações | v1 | Depende do que cada simulador devolve. |
+| 10 | Três cenários de Euribor | v1 | Falta a fonte do realista para 6M e 12M. |
+| 11 | PDF por banco | v1 | Detalhe; a tabela já entrega o essencial. |
+| 12 | Restantes finalidades | v1 | A cobertura varia muito por banco. |
+| 13 | Garantia pública e isenções para jovens até 35 anos | v1 | Exige campos condicionais. |
+| 14 | Mais de 2 titulares; não residentes | v1 | Poucos bancos os simulam. |
+| 15 | Ordenar e filtrar a tabela | depois | Inútil com 3 bancos. |
+| — | Contas, alertas, histórico, ligação pré-preenchida, módulo de investimento, aplicação | fora | Decidido deixar para o futuro. |
