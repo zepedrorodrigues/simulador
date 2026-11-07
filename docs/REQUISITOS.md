@@ -40,7 +40,7 @@ utilizadores · ligação ao banco com dados pré-preenchidos.
 | RF8 | Bloco por banco: MTIC, TAEG, TAN, Euribor considerada, spread, prestação com e sem seguros, valor dos seguros, e cada comissão. | Todos os valores do bloco vêm da resposta do banco. |
 | RF9 | Custos da compra, numa linha à parte que soma ao total: IMT, imposto do selo sobre a aquisição, escritura, registos — com as isenções para jovens quando se aplicam. | Rotulados «calculado pelo simulador», distintos do bloco do banco. |
 | RF10 | Taxa variável e mista: Euribor de hoje e três cenários (ver *Cenários*). | Rotulados «calculado pelo simulador», com o valor da Euribor de cada cenário à vista. |
-| RF11 | Tabela comparativa; por banco, uma ligação para o detalhe, o PDF e o simulador do banco. | Do resumo ao detalhe e ao banco em um clique cada. Ordenada por prestação; em empate, por MTIC e depois por TAEG. |
+| RF11 | Tabela comparativa; por banco, uma ligação para o detalhe, o PDF e o simulador do banco. | Do resumo ao detalhe e ao banco em um clique cada. Ordenada por prestação; em empate, por MTIC. |
 | RF12 | PDF por banco: relatório nosso com a resposta do banco. | Diz que não é documento do banco; só existe enquanto o resultado está aberto. |
 | RF13 | Os resultados aparecem à medida que cada banco responde. | Um banco lento não atrasa os outros. |
 | RF14 | Aviso: indicativo, sem pedido de crédito, os dados seguem para o simulador do banco. | Visível antes de submeter e no resultado. |
@@ -67,9 +67,10 @@ informativa: não é custo certo, não entra no total.
 
 Na taxa fixa não há cenários; na mista, aplicam-se só ao período variável.
 
-Cada cenário mantém o seu valor **durante todo o prazo** (ou todo o período
-variável). O utilizador vê, junto de cada cenário, o valor de Euribor usado, a
-regra que o deu e que se mantém constante — é um limite, não uma previsão.
+O conservador e o positivo mantêm o extremo histórico durante **3 a 5 anos** e
+depois **voltam ao realista** até ao fim do prazo (ou do período variável). O
+utilizador vê, junto de cada cenário, os valores de Euribor usados, a regra que os
+deu e durante quanto tempo cada um se aplica.
 
 A trajectória de cada indexante (3M, 6M, 12M) calcula-se **com dados desse
 indexante**, nunca derivada de outro.
@@ -115,6 +116,7 @@ Fontes secundárias (Bluegamma, curva de swaps) dão ~3,45–3,59% para o 12M em
 2. Euribor negativa: confirmar se a Lei n.º 32/2018 teve alterações.
 3. Fonte para a trajectória realista do 6M e do 12M (as primárias encontradas só
    dão 3M), e com que frequência se actualizam os três cenários.
+4. Duração exacta dos extremos no conservador e no positivo: 3, 4 ou 5 anos.
 
 ## Funcionalidades e MVP
 
